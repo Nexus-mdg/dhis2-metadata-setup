@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  dhis2_sms_gateway_receiver:
+    build:
+      context: ./sms_receiver
+      dockerfile: Dockerfile
+    container_name: dhis2-sms-gateway
+    restart: unless-stopped
+    environment:
+      - DHIS2_URL=https://dhis2.stack
+      - DHIS2_USERNAME=admin
+      - DHIS2_PASSWORD=district
+      - SMS_PORT=8002
+      - LOG_LEVEL=info
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./sms_receiver:/app
+      - sms_logs:/var/log/sms_receiver
+    networks:
+      - dhis2-external-net
+
+volumes:
+  sms_logs:
+    driver: local
+
+networks:
+  dhis2-external-net:
+    external: true
