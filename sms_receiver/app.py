@@ -13,6 +13,12 @@ import uuid
 from datetime import datetime
 from bottle import Bottle, request, response, run
 
+
+import requests
+import base64
+from urllib.parse import urljoin
+
+
 # Configure logging
 log_level = os.environ.get('LOG_LEVEL', 'info').upper()
 log_file = "/var/log/sms_receiver/sms_receiver.log"
@@ -52,6 +58,11 @@ try:
 except Exception as e:
     logger.error(f"Failed to connect to Redis: {e}")
     redis_client = None
+
+# Add these environment variables at the top with other configs
+DHIS2_URL = os.environ.get('DHIS2_URL', 'https://dhis2:8443')
+DHIS2_USERNAME = os.environ.get('DHIS2_USERNAME', 'admin')
+DHIS2_PASSWORD = os.environ.get('DHIS2_PASSWORD', 'district')
 
 # Initialize Bottle app
 app = Bottle()
@@ -272,15 +283,83 @@ def send_sms():
         return {"status": "error", "message": str(e)}
 
 
+import requests
+from urllib.parse import urljoin
+
+# Add these environment variables at the top with other configs
+DHIS2_URL = os.environ.get('DHIS2_URL', 'https://dhis2.stack')
+DHIS2_USERNAME = os.environ.get('DHIS2_USERNAME', 'admin')
+DHIS2_PASSWORD = os.environ.get('DHIS2_PASSWORD', 'district')
+
+
+def forward_to_dhis2(phone_number, message_content, timestamp, sms_id):
+    """Forward SMS to DHIS2 inbound SMS API"""
+    try:
+        # DHIS2 inbound SMS API endpoint
+        dhis2_sms_url = urljoin(DHIS2_URL, '/api/sms/inbound')
+
+        # Prepare headers
+        headers = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
+
+        # Prepare payload according to DHIS2 SMS API format
+        # DHIS2 expects: originator, text (not message), and optionally sentDate, receivedDate
+        payload = {
+            'originator': phone_number,
+            'text': message_content,  # DHIS2 uses 'text' not 'message'
+            'receivedDate': timestamp,
+            'sentDate': timestamp
+        }
+
+        logger.info(f"Forwarding SMS {sms_id} to DHIS2: {dhis2_sms_url}")
+        logger.info(f"Payload: {payload}")
+
+        # Make the request to DHIS2 with built-in authentication
+        response = requests.post(
+            dhis2_sms_url,
+            json=payload,
+            headers=headers,
+            auth=(DHIS2_USERNAME, DHIS2_PASSWORD),  # Built-in Basic Auth
+            timeout=30,
+            verify=False  # For development - in production, use proper certificates
+        )
+
+        logger.info(f"DHIS2 response status: {response.status_code}")
+        logger.info(f"DHIS2 response body: {response.text}")
+
+        if response.status_code in [200, 201]:
+            logger.info(f"Successfully forwarded SMS {sms_id} to DHIS2")
+            return True, response.json() if response.content else {"status": "success"}
+        else:
+            logger.error(f"DHIS2 rejected SMS {sms_id}: {response.status_code} - {response.text}")
+            return False, {"error": f"DHIS2 returned {response.status_code}: {response.text}"}
+
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Network error forwarding SMS {sms_id} to DHIS2: {e}")
+        return False, {"error": f"Network error: {str(e)}"}
+    except Exception as e:
+        logger.error(f"Unexpected error forwarding SMS {sms_id} to DHIS2: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
+        return False, {"error": f"Unexpected error: {str(e)}"}
+
+
 @app.route('/sms/receive', method='POST')
 def receive_sms():
     """Endpoint to receive inbound SMS (from external sources to DHIS2)"""
     try:
-        logger.info("Received inbound SMS")
+        logger.info("=== INBOUND SMS REQUEST RECEIVED ===")
+        logger.info(f"Method: {request.method}")
         logger.info(f"Content-Type: {request.content_type}")
-        logger.info(f"Raw body: {request.body.read()}")
+        logger.info(f"Headers: {dict(request.headers)}")
 
-        # Reset body stream
+        # Log raw request for debugging
+        request.body.seek(0)
+        raw_body = request.body.read()
+        logger.info(f"Raw body: {raw_body}")
+        logger.info(f"Raw body decoded: {raw_body.decode('utf-8', errors='ignore')}")
         request.body.seek(0)
 
         # Parse incoming request more robustly
@@ -289,6 +368,7 @@ def receive_sms():
         if request.content_type and 'application/json' in request.content_type:
             try:
                 data = request.json or {}
+                logger.info(f"Parsed JSON data: {data}")
             except Exception as e:
                 logger.warning(f"Failed to parse JSON: {e}")
                 # Try to get raw body as fallback
@@ -298,6 +378,7 @@ def receive_sms():
         else:
             # Handle form data or query params
             data = dict(request.forms) or dict(request.params)
+            logger.info(f"Form/query data: {data}")
 
         # Extract SMS details
         phone_number = (data.get('originator') or
@@ -313,7 +394,10 @@ def receive_sms():
 
         timestamp = datetime.now().isoformat()
 
-        logger.info(f"Inbound SMS from {phone_number}: {message_content}")
+        logger.info(f"=== EXTRACTED SMS DATA ===")
+        logger.info(f"Phone: {phone_number}")
+        logger.info(f"Message: {message_content}")
+        logger.info(f"Timestamp: {timestamp}")
 
         # Store SMS in a structured format
         sms_data = {
@@ -321,24 +405,73 @@ def receive_sms():
             'phone': phone_number,
             'message': message_content,
             'timestamp': timestamp,
-            'raw_data': data
+            'raw_data': data,
+            'dhis2_forwarded': False,
+            'dhis2_response': None
         }
 
-        # Store in Redis
+        # Store in Redis first
         sms_id = store_sms_in_redis(sms_data)
 
-        # Log the full SMS data for debugging
-        logger.info(f"Complete inbound SMS data: {json.dumps(sms_data, indent=2)}")
+        if not sms_id:
+            logger.error("Failed to store SMS in Redis")
+            response.status = 500
+            return {"status": "error", "message": "Failed to store SMS"}
 
-        # Return success response
-        response_data = {"status": "success", "message": "SMS received successfully"}
-        if sms_id:
-            response_data["sms_id"] = sms_id
+        # Forward to DHIS2
+        logger.info(f"=== FORWARDING SMS {sms_id} TO DHIS2 ===")
+        dhis2_success, dhis2_response = forward_to_dhis2(phone_number, message_content, timestamp, sms_id)
+
+        # Update SMS record with DHIS2 forwarding results
+        if redis_client:
+            try:
+                redis_client.hset(f"sms:{sms_id}", mapping={
+                    'dhis2_forwarded': 'true' if dhis2_success else 'false',
+                    'dhis2_response': json.dumps(dhis2_response),
+                    'dhis2_timestamp': datetime.now().isoformat(),
+                    'processed': 'true' if dhis2_success else 'false'
+                })
+
+                if dhis2_success:
+                    # Remove from unprocessed queue if successfully forwarded
+                    redis_client.lrem("sms:unprocessed", 1, sms_id)
+
+                logger.info(f"Updated SMS {sms_id} with DHIS2 forwarding status: {dhis2_success}")
+            except Exception as redis_error:
+                logger.error(f"Failed to update SMS {sms_id} in Redis: {redis_error}")
+
+        # Log the complete SMS data for debugging
+        complete_sms_data = {
+            **sms_data,
+            'dhis2_forwarded': dhis2_success,
+            'dhis2_response': dhis2_response
+        }
+        logger.info(f"=== COMPLETE INBOUND SMS DATA ===")
+        logger.info(f"{json.dumps(complete_sms_data, indent=2)}")
+
+        # Return response indicating both storage and forwarding status
+        response_data = {
+            "status": "success" if dhis2_success else "partial_success",
+            "message": "SMS received and forwarded to DHIS2" if dhis2_success else "SMS received but DHIS2 forwarding failed",
+            "sms_id": sms_id,
+            "dhis2_forwarded": dhis2_success,
+            "dhis2_response": dhis2_response
+        }
+
+        logger.info(f"=== SENDING RESPONSE ===")
+        logger.info(f"Response: {response_data}")
+
+        # Set HTTP status based on DHIS2 forwarding success
+        if not dhis2_success:
+            response.status = 207  # Multi-Status: partial success
 
         return response_data
 
     except Exception as e:
-        logger.error(f"Error processing inbound SMS: {e}")
+        logger.error(f"=== ERROR PROCESSING INBOUND SMS ===")
+        logger.error(f"Error: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         response.status = 500
         return {"status": "error", "message": str(e)}
 
