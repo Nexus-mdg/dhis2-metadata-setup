@@ -18,6 +18,7 @@ help:
 	@echo "  make redis-cli   - Open Redis CLI"
 	@echo "  make clean       - Remove containers, volumes, and images"
 	@echo "  make test-sms    - Send a test SMS to the receiver"
+	@echo "  make test-suite  - Run the complete SMS gateway test suite"
 	@echo "  make sms-stats   - Get SMS statistics from Redis"
 
 # Build the container image
@@ -107,3 +108,8 @@ rebuild:
 	docker compose down
 	docker compose build
 	docker compose up -d
+
+# Run the complete SMS gateway test suite
+.PHONY: test-suite
+test-suite:
+	bash sms_receiver/test_sms_gateway.sh
