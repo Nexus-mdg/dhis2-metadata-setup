@@ -1,0 +1,492 @@
+{
+  "organisationUnits": [
+    {
+      "id": "MG000000001",
+      "name": "Madagascar",
+      "shortName": "Madagascar",
+      "openingDate": "1960-06-26",
+      "level": 1
+    },
+    {
+      "id": "MG001000001",
+      "name": "Alaotra-Mangoro",
+      "shortName": "Alaotra-Mangoro",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000002",
+      "name": "Amoron'i Mania",
+      "shortName": "Amoron'i Mania",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000003",
+      "name": "Analamanga",
+      "shortName": "Analamanga",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000004",
+      "name": "Analanjirofo",
+      "shortName": "Analanjirofo",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000005",
+      "name": "Androy",
+      "shortName": "Androy",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000006",
+      "name": "Anosy",
+      "shortName": "Anosy",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000007",
+      "name": "Atsimo-Andrefana",
+      "shortName": "Atsimo-Andrefana",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000008",
+      "name": "Atsimo-Atsinanana",
+      "shortName": "Atsimo-Atsinanana",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000009",
+      "name": "Atsinanana",
+      "shortName": "Atsinanana",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000010",
+      "name": "Betsiboka",
+      "shortName": "Betsiboka",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000011",
+      "name": "Boeny",
+      "shortName": "Boeny",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000012",
+      "name": "Bongolava",
+      "shortName": "Bongolava",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000013",
+      "name": "Diana",
+      "shortName": "Diana",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000014",
+      "name": "Fitovinany",
+      "shortName": "Fitovinany",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000015",
+      "name": "Haute Matsiatra",
+      "shortName": "Haute Matsiatra",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000016",
+      "name": "Ihorombe",
+      "shortName": "Ihorombe",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000017",
+      "name": "Itasy",
+      "shortName": "Itasy",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000018",
+      "name": "Melaky",
+      "shortName": "Melaky",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000019",
+      "name": "Menabe",
+      "shortName": "Menabe",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000020",
+      "name": "Sava",
+      "shortName": "Sava",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000021",
+      "name": "Sofia",
+      "shortName": "Sofia",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000022",
+      "name": "Vakinankaratra",
+      "shortName": "Vakinankaratra",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG001000023",
+      "name": "Vatovavy",
+      "shortName": "Vatovavy",
+      "openingDate": "1960-06-26",
+      "level": 2,
+      "parent": {"id": "MG000000001"}
+    },
+    {
+      "id": "MG002001001",
+      "name": "Antsiranana I",
+      "shortName": "Antsiranana I",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000013"}
+    },
+    {
+      "id": "MG002001002",
+      "name": "Antsiranana II",
+      "shortName": "Antsiranana II",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000013"}
+    },
+    {
+      "id": "MG002001003",
+      "name": "Ambanja",
+      "shortName": "Ambanja",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000013"}
+    },
+    {
+      "id": "MG002001004",
+      "name": "Ambilobe",
+      "shortName": "Ambilobe",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000013"}
+    },
+    {
+      "id": "MG002001005",
+      "name": "Nosy Be",
+      "shortName": "Nosy Be",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000013"}
+    },
+    {
+      "id": "MG002002001",
+      "name": "Antananarivo I",
+      "shortName": "Antananarivo I",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000003"}
+    },
+    {
+      "id": "MG002002002",
+      "name": "Antananarivo II",
+      "shortName": "Antananarivo II",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000003"}
+    },
+    {
+      "id": "MG002002003",
+      "name": "Antananarivo III",
+      "shortName": "Antananarivo III",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000003"}
+    },
+    {
+      "id": "MG002002004",
+      "name": "Antananarivo IV",
+      "shortName": "Antananarivo IV",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000003"}
+    },
+    {
+      "id": "MG002002005",
+      "name": "Antananarivo V",
+      "shortName": "Antananarivo V",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000003"}
+    },
+    {
+      "id": "MG002002006",
+      "name": "Antananarivo VI",
+      "shortName": "Antananarivo VI",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000003"}
+    },
+    {
+      "id": "MG002002007",
+      "name": "Ankazobe",
+      "shortName": "Ankazobe",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000003"}
+    },
+    {
+      "id": "MG002002008",
+      "name": "Manjakandriana",
+      "shortName": "Manjakandriana",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000003"}
+    },
+    {
+      "id": "MG002003001",
+      "name": "Ambatolampy",
+      "shortName": "Ambatolampy",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000022"}
+    },
+    {
+      "id": "MG002003002",
+      "name": "Antanifotsy",
+      "shortName": "Antanifotsy",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000022"}
+    },
+    {
+      "id": "MG002003003",
+      "name": "Antsirabe I",
+      "shortName": "Antsirabe I",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000022"}
+    },
+    {
+      "id": "MG002003004",
+      "name": "Antsirabe II",
+      "shortName": "Antsirabe II",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000022"}
+    },
+    {
+      "id": "MG002003005",
+      "name": "Betafo",
+      "shortName": "Betafo",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000022"}
+    },
+    {
+      "id": "MG002003006",
+      "name": "Faratsiho",
+      "shortName": "Faratsiho",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000022"}
+    },
+    {
+      "id": "MG002003007",
+      "name": "Mandoto",
+      "shortName": "Mandoto",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000022"}
+    },
+    {
+      "id": "MG002004001",
+      "name": "Antalaha",
+      "shortName": "Antalaha",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000020"}
+    },
+    {
+      "id": "MG002004002",
+      "name": "Sambava",
+      "shortName": "Sambava",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000020"}
+    },
+    {
+      "id": "MG002004003",
+      "name": "Vohemar",
+      "shortName": "Vohemar",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000020"}
+    },
+    {
+      "id": "MG002004004",
+      "name": "Andapa",
+      "shortName": "Andapa",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000020"}
+    },
+    {
+      "id": "MG002005001",
+      "name": "Mahajanga I",
+      "shortName": "Mahajanga I",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000011"}
+    },
+    {
+      "id": "MG002005002",
+      "name": "Mahajanga II",
+      "shortName": "Mahajanga II",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000011"}
+    },
+    {
+      "id": "MG002005003",
+      "name": "Ambato-Boeni",
+      "shortName": "Ambato-Boeni",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000011"}
+    },
+    {
+      "id": "MG002005004",
+      "name": "Kandreho",
+      "shortName": "Kandreho",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000011"}
+    },
+    {
+      "id": "MG002005005",
+      "name": "Marovoay",
+      "shortName": "Marovoay",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000011"}
+    },
+    {
+      "id": "MG002005006",
+      "name": "Soalala",
+      "shortName": "Soalala",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000011"}
+    },
+    {
+      "id": "MG002006001",
+      "name": "Toamasina I",
+      "shortName": "Toamasina I",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000009"}
+    },
+    {
+      "id": "MG002006002",
+      "name": "Toamasina II",
+      "shortName": "Toamasina II",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000009"}
+    },
+    {
+      "id": "MG002006003",
+      "name": "Brickaville",
+      "shortName": "Brickaville",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000009"}
+    },
+    {
+      "id": "MG002006004",
+      "name": "Mahanoro",
+      "shortName": "Mahanoro",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000009"}
+    },
+    {
+      "id": "MG002006005",
+      "name": "Marolambo",
+      "shortName": "Marolambo",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000009"}
+    },
+    {
+      "id": "MG002006006",
+      "name": "Vatomandry",
+      "shortName": "Vatomandry",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000009"}
+    },
+    {
+      "id": "MG002006007",
+      "name": "Vohibinany",
+      "shortName": "Vohibinany",
+      "openingDate": "1960-06-26",
+      "level": 3,
+      "parent": {"id": "MG001000009"}
+    }
+  ]
+}
+
