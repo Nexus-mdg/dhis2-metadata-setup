@@ -70,4 +70,8 @@ This SMS gateway connects to the DHIS2 instance via the external `dhis2-external
 
 ## License
 
+## Other
+![image](https://github.com/user-attachments/assets/ed1af5d1-6dc4-4e82-99d6-96ef0988d7e4)
+
+
 See the [LICENSE](LICENSE) file for details.
