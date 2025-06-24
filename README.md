@@ -1,5 +1,7 @@
 # DHIS2 SMS Gateway
 
+> **Disclaimer:** This codebase is mostly AI-generated and is intended for testing and demonstration purposes only. It is not designed or reviewed for production use. Use at your own risk.
+
 A lightweight SMS gateway service for DHIS2 that handles both incoming and outgoing SMS messages using Docker containers.
 
 ## Features
@@ -69,4 +71,3 @@ This SMS gateway connects to the DHIS2 instance via the external `dhis2-external
 ## License
 
 See the [LICENSE](LICENSE) file for details.
-
