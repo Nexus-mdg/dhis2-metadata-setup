@@ -9,6 +9,7 @@ help:
 	@echo "  make build       - Build the SMS gateway container image"
 	@echo "  make up          - Start the SMS gateway service and Redis"
 	@echo "  make down        - Stop the SMS gateway service and Redis"
+	@echo "  make rebuild     - Stop, rebuild, and start the services (down, build, up)"
 	@echo "  make restart     - Restart the SMS gateway service and Redis"
 	@echo "  make logs        - View SMS gateway service logs"
 	@echo "  make logs-redis  - View Redis logs"
@@ -81,7 +82,14 @@ clean:
 test-sms:
 	curl -X POST http://localhost:8002/sms/receive \
 		-H "Content-Type: application/json" \
-		-d '{"originator": "+123456789", "message": "This is a test SMS message"}'
+		-d '{"originator": "+123456789", "message": "This is a test inbound SMS message"}'
+
+# Test outbound SMS (DHIS2 sending through gateway)
+.PHONY: test-outbound
+test-outbound:
+	curl -X POST http://localhost:8002/sms/send \
+		-H "Content-Type: application/json" \
+		-d '{"recipient": "+261331234567", "message": "This is a test outbound SMS from DHIS2"}'
 
 # Get SMS statistics from Redis
 .PHONY: sms-stats
@@ -92,3 +100,10 @@ sms-stats:
 .PHONY: sms-list
 sms-list:
 	curl -X GET http://localhost:8002/sms/list?limit=10
+
+# Down, build, and up in one command
+.PHONY: rebuild
+rebuild:
+	docker compose down
+	docker compose build
+	docker compose up -d
