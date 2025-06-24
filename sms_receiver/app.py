@@ -175,10 +175,22 @@ def send_sms():
                 query_string = request.environ.get('QUERY_STRING', '')
                 logger.info(f"Query string: {query_string}")
                 if query_string:
-                    from urllib.parse import parse_qs
+                    from urllib.parse import parse_qs, unquote_plus
                     parsed = parse_qs(query_string)
-                    data = {k: v[0] if v else '' for k, v in parsed.items()}
+                    data = {k: unquote_plus(v[0]) if v else '' for k, v in parsed.items()}
                     logger.info(f"Parsed query string: {data}")
+
+        # If still no data, try parsing raw body as form data
+        if not data and raw_body:
+            try:
+                from urllib.parse import parse_qs, unquote_plus
+                body_str = raw_body.decode('utf-8')
+                if '=' in body_str:
+                    parsed = parse_qs(body_str)
+                    data = {k: unquote_plus(v[0]) if v else '' for k, v in parsed.items()}
+                    logger.info(f"Parsed raw body as form data: {data}")
+            except Exception as e:
+                logger.warning(f"Failed to parse raw body: {e}")
 
         # Extract SMS details - DHIS2 might use different field names
         recipients = data.get('recipients', [])
@@ -192,10 +204,16 @@ def send_sms():
                         data.get('originator') or  # Sometimes DHIS2 uses this
                         (recipients[0] if recipients else 'unknown'))
 
+        # Handle different possible field names for message content and URL decode
         message_content = (data.get('message') or
                            data.get('text') or
                            data.get('content') or
                            'No message content')
+
+        # URL decode the message content to handle + symbols and other encoded characters
+        if message_content and message_content != 'No message content':
+            from urllib.parse import unquote_plus
+            message_content = unquote_plus(message_content)
 
         timestamp = datetime.now().isoformat()
 
