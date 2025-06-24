@@ -283,15 +283,6 @@ def send_sms():
         return {"status": "error", "message": str(e)}
 
 
-import requests
-from urllib.parse import urljoin
-
-# Add these environment variables at the top with other configs
-DHIS2_URL = os.environ.get('DHIS2_URL', 'https://dhis2.stack')
-DHIS2_USERNAME = os.environ.get('DHIS2_USERNAME', 'admin')
-DHIS2_PASSWORD = os.environ.get('DHIS2_PASSWORD', 'district')
-
-
 def forward_to_dhis2(phone_number, message_content, timestamp, sms_id):
     """Forward SMS to DHIS2 inbound SMS API"""
     try:
@@ -305,12 +296,18 @@ def forward_to_dhis2(phone_number, message_content, timestamp, sms_id):
         }
 
         # Prepare payload according to DHIS2 SMS API format
-        # DHIS2 expects: originator, text (not message), and optionally sentDate, receivedDate
+        # Based on DHIS2 docs: text, originator, receiveddate, sentdate are mandatory
+        # Format dates as YYYY-MM-DD and add smsstatus for proper classification
+        formatted_date = datetime.now().strftime('%Y-%m-%d')
+
         payload = {
+            'text': message_content,
             'originator': phone_number,
-            'text': message_content,  # DHIS2 uses 'text' not 'message'
-            'receivedDate': timestamp,
-            'sentDate': timestamp
+            'receiveddate': formatted_date,
+            'sentdate': formatted_date,
+            'gatewayid': 'sms-gateway',  # Identify our gateway
+            'smsstatus': 'INCOMING',  # Explicitly mark as incoming
+            'smsencoding': '1'  # Standard encoding
         }
 
         logger.info(f"Forwarding SMS {sms_id} to DHIS2: {dhis2_sms_url}")
