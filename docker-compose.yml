@@ -1,7 +1,5 @@
-version: '3.8'
-
 services:
-  dhis2_sms_gateway_receiver:
+  dhis2-sms-gateway.receiver:
     build:
       context: ./sms_receiver
       dockerfile: Dockerfile

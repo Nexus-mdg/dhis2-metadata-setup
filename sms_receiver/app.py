@@ -38,33 +38,56 @@ def receive_sms():
     """Endpoint to receive SMS from the DHIS2 SMS gateway"""
     try:
         logger.info("Received SMS request")
+        logger.info(f"Content-Type: {request.content_type}")
+        logger.info(f"Raw body: {request.body.read()}")
 
-        # Parse incoming request
-        if request.content_type and request.content_type.startswith('application/json'):
-            data = request.json
+        # Reset body stream
+        request.body.seek(0)
+
+        # Parse incoming request more robustly
+        data = {}
+
+        if request.content_type and 'application/json' in request.content_type:
+            try:
+                data = request.json or {}
+            except Exception as e:
+                logger.warning(f"Failed to parse JSON: {e}")
+                # Try to get raw body as fallback
+                raw_body = request.body.read().decode('utf-8')
+                logger.info(f"Raw body content: {raw_body}")
+                data = {'raw_content': raw_body}
         else:
-            data = request.params
+            # Handle form data or query params
+            data = dict(request.forms) or dict(request.params)
 
-        # Extract SMS data
-        phone_number = data.get('originator', '')
-        message_content = data.get('message', '')
+        # DHIS2 might send data in different formats, so let's be flexible
+        phone_number = (data.get('originator') or
+                        data.get('from') or
+                        data.get('sender') or
+                        data.get('msisdn') or
+                        'unknown')
+
+        message_content = (data.get('message') or
+                           data.get('text') or
+                           data.get('content') or
+                           str(data))
+
         timestamp = datetime.now().isoformat()
 
         logger.info(f"SMS from {phone_number}: {message_content}")
 
-        # Store SMS in a structured format for later processing
+        # Store SMS in a structured format
         sms_data = {
             'phone': phone_number,
             'message': message_content,
-            'timestamp': timestamp
+            'timestamp': timestamp,
+            'raw_data': data
         }
 
         # Log the full SMS data for debugging
-        logger.debug(f"Complete SMS data: {json.dumps(sms_data)}")
+        logger.info(f"Complete SMS data: {json.dumps(sms_data, indent=2)}")
 
-        # Here you could save to a database, forward to another service, etc.
-
-        # Return success response
+        # Return success response that DHIS2 expects
         return {"status": "success", "message": "SMS received successfully"}
 
     except Exception as e:
