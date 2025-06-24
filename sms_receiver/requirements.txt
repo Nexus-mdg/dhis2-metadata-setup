@@ -1,3 +1,4 @@
 bottle==0.12.25
 python-dotenv==1.0.0
 gunicorn==21.2.0
+redis==5.0.1

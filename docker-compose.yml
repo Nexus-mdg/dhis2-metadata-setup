@@ -11,6 +11,9 @@ services:
       - DHIS2_PASSWORD=district
       - SMS_PORT=8002
       - LOG_LEVEL=info
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
     ports:
       - "8002:8002"
     volumes:
@@ -18,9 +21,25 @@ services:
       - sms_logs:/var/log/sms_receiver
     networks:
       - dhis2-external-net
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    container_name: dhis2-sms-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - dhis2-external-net
+    command: redis-server --appendonly yes
 
 volumes:
   sms_logs:
+    driver: local
+  redis_data:
     driver: local
 
 networks:
